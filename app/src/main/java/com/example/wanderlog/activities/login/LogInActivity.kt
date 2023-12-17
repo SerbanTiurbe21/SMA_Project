@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import com.example.wanderlog.MainActivity
@@ -19,6 +20,7 @@ class LogInActivity : AppCompatActivity() {
     private lateinit var passwordInputLogIn: TextInputEditText
     private lateinit var btnGetStartedLogIn: Button
     private lateinit var tvForgotPasswordLogIn: TextView
+    private lateinit var chkTermsConditions: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,7 @@ class LogInActivity : AppCompatActivity() {
         passwordInputLogIn = findViewById(R.id.password_input_log_in)
         btnGetStartedLogIn = findViewById(R.id.btn_get_started_log_in)
         tvForgotPasswordLogIn = findViewById(R.id.tv_forgot_password_log_in)
+        chkTermsConditions = findViewById(R.id.chk_terms_conditions)
     }
 
     private fun onBtnGetStartedClicked(){
@@ -61,6 +64,11 @@ class LogInActivity : AppCompatActivity() {
 
             if(!validatePassword(passwordInputLogIn.text.toString())){
                 Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if(!chkTermsConditions.isChecked){
+                Toast.makeText(this, "Please accept the terms and conditions", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
