@@ -64,4 +64,9 @@
     <string name="title_activity_forget_password">ForgetPasswordActivity</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="stringsList">
+        <item>"General question"</item>
+        <item>"Registration difficulties"</item>
+        <item>"Unable to recover password"</item>
+    </string-array>
 </resources>

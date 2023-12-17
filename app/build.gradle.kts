@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("plugin.lombok") version "1.9.21"
+    id("io.freefair.lombok") version "8.1.0"
 }
 
 android {
