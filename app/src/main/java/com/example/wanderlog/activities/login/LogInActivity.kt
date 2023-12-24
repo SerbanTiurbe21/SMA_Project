@@ -76,12 +76,6 @@ class LogInActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // TODO: Check in the backend if the user exists
-            var user = User(
-                emailInputLogIn.text.toString(),
-                passwordInputLogIn.text.toString(),
-                setOf()
-            )
             val loginRequest = LoginRequest(
                 emailInputLogIn.text.toString(),
                 passwordInputLogIn.text.toString()
