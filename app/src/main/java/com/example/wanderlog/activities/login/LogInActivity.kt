@@ -10,6 +10,10 @@ import android.widget.Toast
 import com.example.wanderlog.MainActivity
 import com.example.wanderlog.R
 import com.example.wanderlog.activities.forgetpassword.ForgetPasswordActivity
+import com.example.wanderlog.api.service.UserService
+import com.example.wanderlog.database.dto.LoginRequest
+import com.example.wanderlog.database.models.User
+import com.example.wanderlog.retrofit.RetrofitInstance
 import com.example.wanderlog.utils.EmailUtils.validateEmail
 import com.example.wanderlog.utils.PasswordUtils.validatePassword
 import com.google.android.material.textfield.TextInputEditText
@@ -73,9 +77,38 @@ class LogInActivity : AppCompatActivity() {
             }
 
             // TODO: Check in the backend if the user exists
+            var user = User(
+                emailInputLogIn.text.toString(),
+                passwordInputLogIn.text.toString(),
+                setOf()
+            )
+            val loginRequest = LoginRequest(
+                emailInputLogIn.text.toString(),
+                passwordInputLogIn.text.toString()
+            )
+            val userService: UserService = RetrofitInstance.getRetrofitInstance().create(
+                UserService::class.java
+            )
+            val call = userService.login(loginRequest)
+            call.enqueue(object : retrofit2.Callback<Boolean> {
+                override fun onResponse(call: retrofit2.Call<Boolean>, response: retrofit2.Response<Boolean>) {
+                    if (response.isSuccessful) {
+                        if (response.body() == true) {
+                            Toast.makeText(this@LogInActivity, "Login successful", Toast.LENGTH_SHORT).show()
+                            var intent = Intent(this@LogInActivity, MainActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(this@LogInActivity, "Login failed", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(this@LogInActivity, "Login failed", Toast.LENGTH_SHORT).show()
+                    }
+                }
 
-            var intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+                override fun onFailure(call: retrofit2.Call<Boolean>, t: Throwable) {
+                    Toast.makeText(this@LogInActivity, "Login failed", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 

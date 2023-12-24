@@ -1,5 +1,6 @@
 package com.example.wanderlog.api.service
 
+import com.example.wanderlog.database.dto.LoginRequest
 import com.example.wanderlog.database.models.User
 import retrofit2.Call
 import retrofit2.http.Body
@@ -22,4 +23,7 @@ interface UserService {
 
     @PUT("/api/v1/user/update/{id}")
     fun updateUserById(@Path("id") id: String, @Body user: User): Call<Optional<User>>
+
+    @POST("/api/v1/auth/login")
+    fun login(@Body loginRequest: LoginRequest): Call<Boolean>
 }

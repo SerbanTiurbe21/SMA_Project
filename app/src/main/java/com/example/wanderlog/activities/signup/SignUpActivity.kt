@@ -94,7 +94,6 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // TODO: Add user to database
             val user = User(
                 email = emailInput.text.toString(),
                 password = passwordInput.text.toString(),
