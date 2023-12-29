@@ -1,6 +1,10 @@
 package com.example.wanderlog
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.StyleSpan
 import android.view.Menu
 import android.widget.TextView
 import com.google.android.material.navigation.NavigationView
@@ -24,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userEmailTextView: TextView
     private lateinit var ratingTextView: TextView
     private lateinit var textViewLevel: TextView
+    private lateinit var textViewLoyaltyProgram: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +52,17 @@ class MainActivity : AppCompatActivity() {
         userEmailTextView = headerView.findViewById(R.id.textViewEmail)
         ratingTextView = headerView.findViewById(R.id.ratingTextView)
         textViewLevel = headerView.findViewById(R.id.textViewLevel)
+        textViewLoyaltyProgram = headerView.findViewById(R.id.textViewLoyaltyProgram)
 
         val currentUser: UserDTO? = retrieveCurrentUser()
         if (currentUser != null) {
-            updateUI(extractNameFromEmail(currentUser.email), currentUser.email, calculateTripsRating(currentUser.trips), getUserLevel(currentUser.trips.size))
+            val remainingTrips: Int = when(currentUser.trips.size){
+                in 0..4 -> 5 - currentUser.trips.size
+                in 5..9 -> 10 - currentUser.trips.size
+                in 10..14 -> 15 - currentUser.trips.size
+                else -> 0
+            }
+            updateUI(extractNameFromEmail(currentUser.email), currentUser.email, calculateTripsRating(currentUser.trips), getUserLevel(currentUser.trips.size), remainingTrips)
         }
 
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -67,11 +79,38 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun updateUI(name: String, email: String, rating: String, level: String) {
+    private fun updateUI(name: String, email: String, rating: String, level: String, remainingTrips: Int) {
         userNameTextView.text = name
         userEmailTextView.text = email
         ratingTextView.text = rating
         textViewLevel.text = level
+
+        val nextLevel: String = when(level){
+            "Bronze Level" -> "Silver Level"
+            "Silver Level" -> "Gold Level"
+            "Gold Level" -> "Platinum Level"
+            else -> "Platinum Level"
+        }
+
+        val loyaltyText = getString(R.string.loyalty_program_text, name, level, remainingTrips, "31.12.2024", nextLevel)
+        val spannableText = SpannableStringBuilder(loyaltyText)
+
+        fun setBoldSpan(text: String) {
+            val start = loyaltyText.indexOf(text)
+            if (start != -1) {
+                spannableText.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    start,
+                    start + text.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+        }
+        setBoldSpan(name)
+        setBoldSpan(level)
+        setBoldSpan(nextLevel)
+
+        textViewLoyaltyProgram.text = spannableText
     }
 
     private fun extractNameFromEmail(email: String): String {
@@ -105,6 +144,4 @@ class MainActivity : AppCompatActivity() {
             else -> "Bronze Level"
         }
     }
-
-
 }
