@@ -11,7 +11,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.wanderlog.database.dto.UserDTO
 import com.example.wanderlog.databinding.ActivityMainBinding
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,10 +42,11 @@ class MainActivity : AppCompatActivity() {
         val headerView = navView.getHeaderView(0)
         userNameTextView = headerView.findViewById(R.id.textViewName)
         userEmailTextView = headerView.findViewById(R.id.textViewEmail)
-        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-        val email: String? = sharedPreferences.getString("EMAIL", null)
-        val name = extractNameFromEmail(email!!)
-        updateUI(name, email)
+
+        val currentUser: UserDTO? = retrieveCurrentUser()
+        if (currentUser != null) {
+            updateUI(extractNameFromEmail(currentUser.email), currentUser.email)
+        }
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -68,4 +71,15 @@ class MainActivity : AppCompatActivity() {
         val usernamePart = email.substringBefore("@")
         return usernamePart.uppercase()
     }
+
+    private fun retrieveCurrentUser(): UserDTO? {
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        val userJson = sharedPreferences.getString("USER", null)
+        return if (userJson != null) {
+            Gson().fromJson(userJson, UserDTO::class.java)
+        } else {
+            null
+        }
+    }
+
 }
