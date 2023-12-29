@@ -3,13 +3,11 @@ package com.example.wanderlog.activities.forgetpassword
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import com.example.wanderlog.R
 import com.example.wanderlog.activities.login.LogInActivity
 import com.example.wanderlog.api.service.UserService
-import com.example.wanderlog.database.dto.UserDTO
 import com.example.wanderlog.database.models.User
 import com.example.wanderlog.retrofit.RetrofitInstance
 import com.google.android.material.textfield.TextInputEditText

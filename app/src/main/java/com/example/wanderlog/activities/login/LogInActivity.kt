@@ -12,7 +12,6 @@ import com.example.wanderlog.R
 import com.example.wanderlog.activities.forgetpassword.ForgetPasswordActivity
 import com.example.wanderlog.api.service.UserService
 import com.example.wanderlog.database.dto.LoginRequest
-import com.example.wanderlog.database.models.User
 import com.example.wanderlog.retrofit.RetrofitInstance
 import com.example.wanderlog.utils.EmailUtils.validateEmail
 import com.example.wanderlog.utils.PasswordUtils.validatePassword
