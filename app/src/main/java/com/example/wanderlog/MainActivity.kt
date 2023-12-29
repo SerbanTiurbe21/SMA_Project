@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.StyleSpan
 import android.view.Menu
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.wanderlog.database.dto.UserDTO
 import com.example.wanderlog.database.models.Trip
 import com.example.wanderlog.databinding.ActivityMainBinding
+import com.example.wanderlog.utils.LoyaltyLevel
 import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +31,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ratingTextView: TextView
     private lateinit var textViewLevel: TextView
     private lateinit var textViewLoyaltyProgram: TextView
+    private lateinit var imageViewFirstLevel: ImageView
+    private lateinit var imageViewSecondLevel: ImageView
+    private lateinit var imageViewThirdLevel: ImageView
+    private lateinit var imageViewFourthLevel: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +59,10 @@ class MainActivity : AppCompatActivity() {
         ratingTextView = headerView.findViewById(R.id.ratingTextView)
         textViewLevel = headerView.findViewById(R.id.textViewLevel)
         textViewLoyaltyProgram = headerView.findViewById(R.id.textViewLoyaltyProgram)
+        imageViewFirstLevel = headerView.findViewById(R.id.imageViewFirstLevel)
+        imageViewSecondLevel = headerView.findViewById(R.id.imageViewSecondLevel)
+        imageViewThirdLevel = headerView.findViewById(R.id.imageViewThirdLevel)
+        imageViewFourthLevel = headerView.findViewById(R.id.imageViewFourthLevel)
 
         val currentUser: UserDTO? = retrieveCurrentUser()
         if (currentUser != null) {
@@ -111,6 +121,14 @@ class MainActivity : AppCompatActivity() {
         setBoldSpan(nextLevel)
 
         textViewLoyaltyProgram.text = spannableText
+
+        val enumLevel = when(level){
+            "Bronze Level" -> "BRONZE"
+            "Silver Level" -> "SILVER"
+            "Gold Level" -> "GOLD"
+            else -> "PLATINUM"
+        }
+        updateLoyaltyIcons(LoyaltyLevel.valueOf(enumLevel))
     }
 
     private fun extractNameFromEmail(email: String): String {
@@ -144,4 +162,34 @@ class MainActivity : AppCompatActivity() {
             else -> "Bronze Level"
         }
     }
+
+    private fun updateLoyaltyIcons(currentLevel: LoyaltyLevel) {
+        when (currentLevel) {
+            LoyaltyLevel.BRONZE -> {
+                imageViewFirstLevel.setImageResource(R.drawable.photoicon)
+                imageViewSecondLevel.setImageResource(R.drawable.secondlevel)
+                imageViewThirdLevel.setImageResource(R.drawable.lockedlevel)
+                imageViewFourthLevel.setImageResource(R.drawable.lockedlevel)
+            }
+            LoyaltyLevel.SILVER -> {
+                imageViewFirstLevel.setImageResource(R.drawable.checkedicon)
+                imageViewSecondLevel.setImageResource(R.drawable.photoicon)
+                imageViewThirdLevel.setImageResource(R.drawable.thirdlevelicon)
+                imageViewFourthLevel.setImageResource(R.drawable.fourthlevel)
+            }
+            LoyaltyLevel.GOLD -> {
+                imageViewFirstLevel.setImageResource(R.drawable.checkedicon)
+                imageViewSecondLevel.setImageResource(R.drawable.checkedicon)
+                imageViewThirdLevel.setImageResource(R.drawable.photoicon)
+                imageViewFourthLevel.setImageResource(R.drawable.fourthlevel)
+            }
+            LoyaltyLevel.PLATINUM -> {
+                imageViewFirstLevel.setImageResource(R.drawable.checkedicon)
+                imageViewSecondLevel.setImageResource(R.drawable.checkedicon)
+                imageViewThirdLevel.setImageResource(R.drawable.checkedicon)
+                imageViewFourthLevel.setImageResource(R.drawable.photoicon)
+            }
+        }
+    }
+
 }

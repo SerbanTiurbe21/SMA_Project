@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="300dp"
-    android:background="@drawable/side_nav_bar"
+    android:background="#F8F8F8"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -92,5 +92,56 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewLevel" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLoyaltyProgram">
+
+        <ImageView
+            android:id="@+id/imageViewFirstLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/checkedicon" />
+
+        <ImageView
+            android:layout_width="49dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/connectingline" />
+
+        <ImageView
+            android:id="@+id/imageViewSecondLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/secondlevel" />
+
+        <ImageView
+            android:layout_width="49dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/connectingline" />
+
+        <ImageView
+            android:id="@+id/imageViewThirdLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/thirdlevelicon" />
+
+        <ImageView
+            android:layout_width="49dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/connectingline" />
+
+        <ImageView
+            android:id="@+id/imageViewFourthLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/lockedlevel" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
