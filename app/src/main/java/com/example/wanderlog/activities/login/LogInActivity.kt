@@ -88,6 +88,7 @@ class LogInActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         if (response.body() == true) {
                             Toast.makeText(this@LogInActivity, "Login successful", Toast.LENGTH_SHORT).show()
+                            saveUserDetails()
                             var intent = Intent(this@LogInActivity, MainActivity::class.java)
                             startActivity(intent)
                         } else {
@@ -110,5 +111,14 @@ class LogInActivity : AppCompatActivity() {
             var intent = Intent(this, ForgetPasswordActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun saveUserDetails(){
+        val sharedPreferences = getSharedPreferences("sharedPrefs ", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.apply{
+            putString("EMAIL", emailInputLogIn.text.toString())
+            putString("PASSWORD", passwordInputLogIn.text.toString())
+        }.apply()
     }
 }
