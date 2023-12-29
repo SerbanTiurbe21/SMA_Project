@@ -114,11 +114,10 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun saveUserDetails(){
-        val sharedPreferences = getSharedPreferences("sharedPrefs ", MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.apply{
             putString("EMAIL", emailInputLogIn.text.toString())
-            putString("PASSWORD", passwordInputLogIn.text.toString())
         }.apply()
     }
 }
