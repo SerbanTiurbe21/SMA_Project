@@ -2,7 +2,6 @@ package com.example.wanderlog.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wanderlog.database.dto.UserDTO
-import com.example.wanderlog.database.models.Trip
 import com.example.wanderlog.databinding.FragmentHomeBinding
 import com.example.wanderlog.recyclerview.TripAdapter
 import com.google.gson.Gson
@@ -64,8 +62,6 @@ class HomeFragment : Fragment() {
 
         if(user != null){
             val userDTO: UserDTO = Gson().fromJson(user, UserDTO::class.java)
-//            val trips: Set<Trip> = userDTO.trips
-//            tripAdapter.updateTrips(trips)
             val userId: String = userDTO.id
             homeViewModel.fetchTrips(userId)
         }
