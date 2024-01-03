@@ -1,6 +1,7 @@
 package com.example.wanderlog.api.service
 
 import com.example.wanderlog.database.models.Trip
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,7 +19,7 @@ interface TripService {
     fun getTripById(@Path("id") id: String): Call<Trip>
 
     @GET("/api/v1/trips/user")
-    fun getTripsByUserId(@Query("userId") userId: String): Call<List<Trip>>
+    fun getTripsByUserId(@Query("userId") userId: String): Call<ResponseBody>
 
     @PUT("/api/v1/trips/update/{id}")
     fun updateTripById(@Path("id") id: String, @Body trip: Trip): Call<Optional<Optional<Trip>>>
