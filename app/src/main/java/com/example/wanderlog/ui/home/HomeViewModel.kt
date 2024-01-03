@@ -16,7 +16,7 @@ import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
 
-    private val _trips = MutableLiveData<Set<Trip>>()
+    private val _trips = MutableLiveData<Set<Trip>>(emptySet())
     val trips: LiveData<Set<Trip>> = _trips
 
     fun fetchTrips(userId: String) {
@@ -41,4 +41,27 @@ class HomeViewModel : ViewModel() {
         })
     }
 
+    fun updateTrip(trip: Trip) {
+        val tripService: TripService = RetrofitInstance.getRetrofitInstance().create(TripService::class.java)
+        val call: Call<Trip?> = tripService.updateTripById(trip.id, trip)
+        call.enqueue(object : Callback<Trip?> {
+            override fun onResponse(call: Call<Trip?>, response: Response<Trip?>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        val updatedTrip = it
+                        val updatedTrips = trips.value?.toMutableSet() ?: mutableSetOf()
+                        updatedTrips?.removeIf { trip -> trip.id == updatedTrip.id }
+                        updatedTrips?.add(updatedTrip)
+                        _trips.postValue(updatedTrips)
+                    }
+                } else {
+                    Log.e("HomeViewModel", "Error: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Trip?>, t: Throwable) {
+                Log.e("HomeViewModel", "Failure: ${t.message}")
+            }
+        })
+    }
 }

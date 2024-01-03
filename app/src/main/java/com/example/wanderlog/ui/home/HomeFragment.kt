@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wanderlog.database.dto.UserDTO
+import com.example.wanderlog.database.models.Trip
 import com.example.wanderlog.databinding.FragmentHomeBinding
 import com.example.wanderlog.recyclerview.TripAdapter
 import com.google.gson.Gson
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), TripAdapter.TripUpdateListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -37,7 +38,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        tripAdapter = TripAdapter(emptySet())
+        tripAdapter = TripAdapter(emptySet(), this)
         binding.recyclerViewTrips.apply {
             adapter = tripAdapter
             layoutManager = LinearLayoutManager(context)
@@ -45,6 +46,7 @@ class HomeFragment : Fragment() {
 
         homeViewModel.trips.observe(viewLifecycleOwner) { trips ->
             tripAdapter.updateTrips(trips)
+            binding.swipeRefreshLayout.isRefreshing = false
         }
 
         loadData()
@@ -65,12 +67,15 @@ class HomeFragment : Fragment() {
             val userId: String = userDTO.id
             homeViewModel.fetchTrips(userId)
         }
-
         binding.swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onTripUpdate(trip: Trip) {
+        homeViewModel.updateTrip(trip)
     }
 }

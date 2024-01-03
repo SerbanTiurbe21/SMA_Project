@@ -22,5 +22,5 @@ interface TripService {
     fun getTripsByUserId(@Query("userId") userId: String): Call<ResponseBody>
 
     @PUT("/api/v1/trips/update/{id}")
-    fun updateTripById(@Path("id") id: String, @Body trip: Trip): Call<Optional<Optional<Trip>>>
+    fun updateTripById(@Path("id") id: String, @Body trip: Trip): Call<Trip?>
 }

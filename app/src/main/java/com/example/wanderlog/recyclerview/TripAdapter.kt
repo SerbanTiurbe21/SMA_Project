@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -13,12 +14,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wanderlog.R
 import com.example.wanderlog.database.models.Trip
+import com.example.wanderlog.utils.DoubleClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TripAdapter(private var tripList: Set<Trip>) : RecyclerView.Adapter<TripAdapter.TripViewHolder>() {
+class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListener: TripUpdateListener) : RecyclerView.Adapter<TripAdapter.TripViewHolder>() {
+    interface TripUpdateListener {
+        fun onTripUpdate(trip: Trip)
+    }
     class TripViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageViewTrip: ImageView = view.findViewById(R.id.imageViewTrip)
         val textViewTripName: TextView = view.findViewById(R.id.textViewTripName)
@@ -26,6 +31,8 @@ class TripAdapter(private var tripList: Set<Trip>) : RecyclerView.Adapter<TripAd
         val linearLayoutStarRating: LinearLayout = view.findViewById(R.id.linearlayoutStarRating)
         val textViewOriginalPrice: TextView = view.findViewById(R.id.textViewOriginalPrice)
         val textViewDiscountedPrice: TextView = view.findViewById(R.id.textViewDiscountedPrice)
+        val imageViewBookmark: ImageView = view.findViewById(R.id.imageViewBookmark)
+        val frameLayoutBookmark: FrameLayout = view.findViewById(R.id.frameLayoutBookmark)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
@@ -42,9 +49,6 @@ class TripAdapter(private var tripList: Set<Trip>) : RecyclerView.Adapter<TripAd
 
         bindStars(holder.linearLayoutStarRating, trip.rating)
 
-//        val bitmap = BitmapFactory.decodeFile(trip.photoUri)
-//        holder.imageViewTrip.setImageBitmap(bitmap)
-
         holder.imageViewTrip.loadImageAsync(trip.photoUri)
 
         holder.textViewOriginalPrice.apply {
@@ -53,6 +57,16 @@ class TripAdapter(private var tripList: Set<Trip>) : RecyclerView.Adapter<TripAd
         }
 
         holder.textViewDiscountedPrice.text = "${trip.price * 0.8}$"
+        val doubleClickListener = DoubleClickListener {
+            trip.isFavourite = !trip.isFavourite
+            if (trip.isFavourite) {
+                holder.imageViewBookmark.setImageResource(R.drawable.favoriteicon)
+            } else {
+                holder.imageViewBookmark.setImageResource(R.drawable.bookmark)
+            }
+            tripUpdateListener.onTripUpdate(trip)
+        }
+        holder.frameLayoutBookmark.setOnClickListener(doubleClickListener)
     }
 
     override fun getItemCount() = tripList.size
@@ -104,6 +118,11 @@ class TripAdapter(private var tripList: Set<Trip>) : RecyclerView.Adapter<TripAd
                 }
             }
         }
+    }
+
+    private fun onBookmarkClicked(trip: Trip) {
+        trip.isFavourite = !trip.isFavourite
+        tripUpdateListener.onTripUpdate(trip)
     }
 
     fun updateTrips(newTrips: Set<Trip>) {
