@@ -64,8 +64,10 @@ class HomeFragment : Fragment() {
 
         if(user != null){
             val userDTO: UserDTO = Gson().fromJson(user, UserDTO::class.java)
-            val trips: Set<Trip> = userDTO.trips
-            tripAdapter.updateTrips(trips)
+//            val trips: Set<Trip> = userDTO.trips
+//            tripAdapter.updateTrips(trips)
+            val userId: String = userDTO.id
+            homeViewModel.fetchTrips(userId)
         }
 
         binding.swipeRefreshLayout.isRefreshing = false
