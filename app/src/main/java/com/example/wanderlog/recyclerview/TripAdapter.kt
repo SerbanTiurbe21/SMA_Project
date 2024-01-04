@@ -10,6 +10,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wanderlog.R
@@ -33,6 +35,7 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
         val textViewDiscountedPrice: TextView = view.findViewById(R.id.textViewDiscountedPrice)
         val imageViewBookmark: ImageView = view.findViewById(R.id.imageViewBookmark)
         val frameLayoutBookmark: FrameLayout = view.findViewById(R.id.frameLayoutBookmark)
+        val imageViewInfoDetails: ImageView = view.findViewById(R.id.imageViewInfoDetails)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
@@ -67,6 +70,10 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
             tripUpdateListener.onTripUpdate(trip)
         }
         holder.frameLayoutBookmark.setOnClickListener(doubleClickListener)
+        holder.imageViewInfoDetails.setOnClickListener{
+            val bundle = bundleOf("tripId" to trip.id)
+            it.findNavController().navigate(R.id.action_nav_home_to_nav_tripDetails, bundle)
+        }
     }
 
     override fun getItemCount() = tripList.size
