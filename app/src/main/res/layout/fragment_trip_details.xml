@@ -4,17 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/detailsscreenbetter"
+    android:background="@drawable/detailsscreen"
     android:padding="16dp">
 
-    <ImageView
+    <TextView
         android:id="@+id/tvTripHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/tripdetailstext"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="64dp"
+        android:gravity="center_horizontal"
+        android:text="Trip Details"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,7 +25,7 @@
         android:id="@+id/layoutTripHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="150dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvTripHeader">
@@ -89,9 +92,9 @@
             android:id="@+id/ivTripImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             android:src="@drawable/ceo" />
-
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
@@ -144,6 +147,7 @@
             android:orientation="horizontal"
             android:weightSum="3">
             <TextView
+                android:id="@+id/origin3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -158,6 +162,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"/>
             <TextView
+                android:id="@+id/destination3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -215,14 +220,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:text="25.Feb"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                 <TextView
                     android:id="@+id/tvArrivalStation"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:text="Budapest, Nepliget Autobusz"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
             </LinearLayout>
         </LinearLayout>

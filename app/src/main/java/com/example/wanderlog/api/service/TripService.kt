@@ -16,7 +16,7 @@ interface TripService {
     fun createTrip(@Body trip: Trip): Call<Trip>
 
     @GET("/api/v1/trips/trip/{id}")
-    fun getTripById(@Path("id") id: String): Call<Trip>
+    fun getTripById(@Path("id") id: String): Call<Trip?>
 
     @GET("/api/v1/trips/user")
     fun getTripsByUserId(@Query("userId") userId: String): Call<ResponseBody>

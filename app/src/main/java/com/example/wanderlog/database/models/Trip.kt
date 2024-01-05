@@ -6,6 +6,7 @@ data class Trip(
     var tripName: String,
     var startDate: String,
     var endDate: String,
+    var origin: String,
     var destination: String,
     var tripType: String,
     var price: Float,
