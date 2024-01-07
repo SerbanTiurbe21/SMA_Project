@@ -151,6 +151,4 @@
         android:src="@drawable/loyaltyprogram"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

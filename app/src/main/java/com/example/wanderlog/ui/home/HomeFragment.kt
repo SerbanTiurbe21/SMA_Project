@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.wanderlog.R
 import com.example.wanderlog.database.dto.UserDTO
 import com.example.wanderlog.database.models.Trip
 import com.example.wanderlog.databinding.FragmentHomeBinding
@@ -30,6 +32,10 @@ class HomeFragment : Fragment(), TripAdapter.TripUpdateListener {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        binding.buttonAddTrip.setOnClickListener {
+            root.findNavController().navigate(R.id.action_nav_home_to_nav_addTrip)
+        }
 
         setupRecyclerView()
         setupSwipeRefreshLayout()

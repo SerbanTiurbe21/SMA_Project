@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         imageViewThirdLevel = headerView.findViewById(R.id.imageViewThirdLevel)
         imageViewFourthLevel = headerView.findViewById(R.id.imageViewFourthLevel)
 
+
         val currentUser: UserDTO? = retrieveCurrentUser()
         if (currentUser != null) {
             val remainingTrips: Int = when(currentUser.trips.size){
@@ -191,5 +192,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }

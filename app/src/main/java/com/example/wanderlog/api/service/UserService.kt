@@ -1,12 +1,9 @@
 package com.example.wanderlog.api.service
 
 import com.example.wanderlog.database.dto.LoginRequest
-import com.example.wanderlog.database.dto.UserDTO
 import com.example.wanderlog.database.models.User
-import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
