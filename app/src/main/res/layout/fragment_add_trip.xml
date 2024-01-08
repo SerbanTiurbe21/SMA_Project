@@ -47,6 +47,7 @@
             android:drawableEnd="@drawable/crosscircle"
             android:gravity="center"
             android:text="City break"
+            android:tag="City break"
             android:textColor="#5D4037" />
 
         <!-- Sea Side Button -->
@@ -63,6 +64,7 @@
             android:drawablePadding="8dp"
             android:gravity="center"
             android:text="Sea side"
+            android:tag="Sea side"
             android:textColor="#5D4037" />
 
         <!-- Mountains Button -->
@@ -77,6 +79,7 @@
             android:drawableEnd="@drawable/crosscircle"
             android:gravity="center"
             android:text="Mountains"
+            android:tag="Mountains"
             android:textColor="#5D4037" />
     </LinearLayout>
 

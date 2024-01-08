@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import com.example.wanderlog.MainActivity
 import com.example.wanderlog.R
 import com.example.wanderlog.api.service.TripService
-import com.example.wanderlog.api.service.UserService
 import com.example.wanderlog.database.dto.TripDTO
 import com.example.wanderlog.database.dto.UserDTO
 import com.example.wanderlog.retrofit.RetrofitInstance
@@ -30,7 +29,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -46,6 +44,8 @@ class AddTripFragment : Fragment() {
     private var selectedDepartureDate: Calendar? = null
     private var selectedImageUri: Uri? = null
     private var currentRating: Float = 0f
+    private var selectedTripType: String? = null
+    private var buttonClickCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,6 +114,10 @@ class AddTripFragment : Fragment() {
             selectImageLauncher.launch("image/*")
         }
 
+        val btnCityBreak = view.findViewById<Button>(R.id.btnCityBreak)
+        val btnSeaSide = view.findViewById<Button>(R.id.btnSeaSide)
+        val btnMountains = view.findViewById<Button>(R.id.btnMountains)
+        setupTripTypeSelection(btnCityBreak, btnSeaSide, btnMountains)
 
         btnPostTrip.setOnClickListener {
             val currentUser = getCurrentUserFromPreferences()
@@ -122,7 +126,7 @@ class AddTripFragment : Fragment() {
             val startDate = departureEditText.text.toString()
             val endDate = arrivingEditText.text.toString()
             val destination = toTextInputEditText.text.toString()
-            val tripType = "Vacation"
+            val tripType = selectedTripType ?: ""
             val price = (priceRangeSlider.values[0] + priceRangeSlider.values[1]) / 2
             val rating = currentRating
             val photoUri = selectedImageUri.toString()
@@ -307,4 +311,19 @@ class AddTripFragment : Fragment() {
         }
     }
 
+    private fun setupTripTypeSelection(btnCityBreak: Button, btnSeaSide: Button, btnMountains: Button) {
+        val buttons = listOf(btnCityBreak, btnSeaSide, btnMountains)
+
+        buttons.forEach { button ->
+            button.setOnClickListener { it ->
+                it.visibility = View.GONE
+
+                val visibleButtons = buttons.filter { it.visibility == View.VISIBLE }
+                if (visibleButtons.size == 1) {
+                    selectedTripType = visibleButtons.first().text.toString()
+                    visibleButtons.first().isEnabled = false
+                }
+            }
+        }
+    }
 }
