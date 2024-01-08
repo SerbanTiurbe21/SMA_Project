@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/detailsscreen"
+    android:background="@drawable/detailsscreenbetter"
     android:padding="16dp"
     tools:context=".fragments.AddTripFragment">
 
@@ -12,13 +12,13 @@
         android:id="@+id/textViewAddTrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
         android:gravity="center_horizontal"
         android:text="Add Destination"
         android:textColor="@color/white"
         android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.625"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,58 +28,58 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewAddTrip"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="32dp"
         android:orientation="horizontal"
-        android:weightSum="3"
-        android:layout_marginTop="80dp"
         android:padding="8dp"
+        android:weightSum="3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewAddTrip">
 
         <!-- City Break Button -->
         <Button
             android:id="@+id/btnCityBreak"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:drawableEnd="@drawable/crosscircle"
+            android:layout_weight="1"
             android:backgroundTint="#FEDCD8"
-            android:text="City break"
+            android:drawableEnd="@drawable/crosscircle"
             android:gravity="center"
-            android:textColor="#5D4037"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+            android:text="City break"
+            android:textColor="#5D4037" />
 
         <!-- Sea Side Button -->
         <Button
             android:id="@+id/btnSeaSide"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="#FEDCD8"
             android:drawableEnd="@drawable/crosscircle"
             android:drawablePadding="8dp"
-            android:backgroundTint="#FEDCD8"
-            android:text="Sea side"
             android:gravity="center"
-            android:textColor="#5D4037"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+            android:text="Sea side"
+            android:textColor="#5D4037" />
 
         <!-- Mountains Button -->
         <Button
             android:id="@+id/btnMountains"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:drawableEnd="@drawable/crosscircle"
+            android:layout_weight="1"
             android:backgroundTint="#FEDCD8"
-            android:text="Mountains"
+            android:drawableEnd="@drawable/crosscircle"
             android:gravity="center"
-            android:textColor="#5D4037"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+            android:text="Mountains"
+            android:textColor="#5D4037" />
     </LinearLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/fromTextInputLayout"
         android:layout_width="0dp"
@@ -209,6 +209,7 @@
     />
 
     <LinearLayout
+        android:id="@+id/priceRangeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -229,10 +230,11 @@
                 android:id="@+id/minPriceEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableStart="@drawable/baseline_attach_money_24"
+                android:gravity="center"
                 android:hint="Min Price"
                 android:inputType="number"
-                android:text="$0"
-                android:gravity="center"/>
+                android:text="0" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -247,11 +249,54 @@
                 android:id="@+id/maxPriceEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableStart="@drawable/baseline_attach_money_24"
+                android:gravity="center"
                 android:hint="Max Price"
                 android:inputType="number"
-                android:text="$10000"
-                android:gravity="center"/>
+                android:text="10000" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnUploadPhoto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="8dp"
+        android:drawableEnd="@drawable/cameraicon"
+        app:backgroundTint="#5040C0"
+        android:text="Upload your travel photo"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/priceRangeLayout"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="0.5"
+        android:rating="0"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/btnUploadPhoto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <Button
+        android:id="@+id/btnAddTrip"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#5040C0"
+        android:text="ADD TRIP"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ratingBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
