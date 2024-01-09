@@ -3,6 +3,7 @@ package com.example.wanderlog.recyclerview
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Paint
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -22,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.FileNotFoundException
 
 class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListener: TripUpdateListener) : RecyclerView.Adapter<TripAdapter.TripViewHolder>() {
     interface TripUpdateListener {
@@ -53,8 +56,9 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
 
         bindStars(holder.linearLayoutStarRating, trip.rating)
 
-        holder.imageViewTrip.loadImageAsync(trip.photoUri)
+//        holder.imageViewTrip.loadImageAsync(, trip.photoUri)
 
+        holder.imageViewTrip.loadImageAsync(holder.imageViewTrip.context, trip.photoUri)
         holder.textViewOriginalPrice.apply {
             text = "${trip.price}$"
             paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
@@ -116,21 +120,28 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
         }
     }
 
-    private fun ImageView.loadImageAsync(imagePath: String) {
+    private fun ImageView.loadImageAsync(context: Context, imageUriString: String) {
         val imageView = this
         CoroutineScope(Dispatchers.IO).launch {
-            val bitmap = BitmapFactory.decodeFile(imagePath)
+            // Convert the String to a Uri
+            val contentUri = Uri.parse(imageUriString)
+
+            // Get the bitmap from the Uri using the ContentResolver
+            val bitmap = try {
+                val imageStream = context.contentResolver.openInputStream(contentUri)
+                BitmapFactory.decodeStream(imageStream)
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                null
+            }
+
             withContext(Dispatchers.Main) {
-                if (imageView.tag == imagePath) {
-                    imageView.setImageBitmap(bitmap)
+                // Set the bitmap to the ImageView if it was successfully decoded
+                bitmap?.let {
+                    imageView.setImageBitmap(it)
                 }
             }
         }
-    }
-
-    private fun onBookmarkClicked(trip: Trip) {
-        trip.isFavourite = !trip.isFavourite
-        tripUpdateListener.onTripUpdate(trip)
     }
 
     fun updateTrips(newTrips: Set<Trip>) {

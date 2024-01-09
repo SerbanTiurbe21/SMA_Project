@@ -45,19 +45,12 @@ class AddTripFragment : Fragment() {
     private var selectedImageUri: Uri? = null
     private var currentRating: Float = 0f
     private var selectedTripType: String? = null
-    private var buttonClickCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            selectedImageUri = it
         }
     }
 
@@ -110,8 +103,9 @@ class AddTripFragment : Fragment() {
 
         updateSlider(priceRangeSlider, minPriceEditText, maxPriceEditText)
 
+
         btnUploadPhoto.setOnClickListener {
-            selectImageLauncher.launch("image/*")
+            selectImageLauncher.launch(arrayOf("image/*"))
         }
 
         val btnCityBreak = view.findViewById<Button>(R.id.btnCityBreak)
@@ -129,6 +123,10 @@ class AddTripFragment : Fragment() {
             val tripType = selectedTripType ?: ""
             val price = (priceRangeSlider.values[0] + priceRangeSlider.values[1]) / 2
             val rating = currentRating
+            if(selectedImageUri == null){
+                Toast.makeText(context, "Please select a photo", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val photoUri = selectedImageUri.toString()
             val temperature = 0f
             val isFavourite = false
@@ -141,6 +139,7 @@ class AddTripFragment : Fragment() {
 
         return view
     }
+
 
     private fun validateTripFields(
         tripName: String,
@@ -323,6 +322,20 @@ class AddTripFragment : Fragment() {
                     selectedTripType = visibleButtons.first().text.toString()
                     visibleButtons.first().isEnabled = false
                 }
+            }
+        }
+    }
+
+    private var selectImageLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        uri?.let {
+            try {
+                val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                context?.contentResolver?.takePersistableUriPermission(uri, takeFlags)
+                selectedImageUri = uri
+            } catch (e: SecurityException) {
+                e.printStackTrace()
+                Toast.makeText(context, "Failed to get permission for the selected file.", Toast.LENGTH_SHORT).show()
             }
         }
     }
