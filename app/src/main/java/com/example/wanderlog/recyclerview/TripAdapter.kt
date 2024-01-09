@@ -7,12 +7,10 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -39,7 +37,7 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
         val textViewDiscountedPrice: TextView = view.findViewById(R.id.textViewDiscountedPrice)
         val imageViewBookmark: ImageView = view.findViewById(R.id.imageViewBookmark)
         val frameLayoutBookmark: FrameLayout = view.findViewById(R.id.frameLayoutBookmark)
-        val imageViewInfoDetails: ImageView = view.findViewById(R.id.imageViewInfoDetails)
+        val textViewInfoDetails: TextView = view.findViewById(R.id.textViewInfoDetails)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
@@ -57,13 +55,17 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
         bindStars(holder.linearLayoutStarRating, trip.rating)
 
 
+        holder.textViewInfoDetails.apply {
+            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        }
+
         holder.imageViewTrip.loadImageAsync(holder.imageViewTrip.context, trip.photoUri)
         holder.textViewOriginalPrice.apply {
-            text = "${trip.price}$"
+            text = "${trip.price.toInt()}$"
             paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         }
 
-        holder.textViewDiscountedPrice.text = "${trip.price * 0.8}$"
+        holder.textViewDiscountedPrice.text = "${(trip.price * 0.8).toInt()}$"
         val doubleClickListener = DoubleClickListener {
             trip.isFavourite = !trip.isFavourite
             if (trip.isFavourite) {
@@ -74,7 +76,7 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
             tripUpdateListener.onTripUpdate(trip)
         }
         holder.frameLayoutBookmark.setOnClickListener(doubleClickListener)
-        holder.imageViewInfoDetails.setOnClickListener{
+        holder.textViewInfoDetails.setOnClickListener{
             val bundle = bundleOf("tripId" to trip.id)
             it.findNavController().navigate(R.id.action_nav_home_to_nav_tripDetails, bundle)
         }
