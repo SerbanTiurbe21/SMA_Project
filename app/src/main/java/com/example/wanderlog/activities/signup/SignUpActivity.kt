@@ -50,7 +50,7 @@ class SignUpActivity : AppCompatActivity() {
         ivGoogle = findViewById(R.id.iv_google)
         tvLogin = findViewById(R.id.tv_login)
         tvSkip = findViewById(R.id.tv_skip)
-        btnGetStarted = findViewById(R.id.btn_get_started)
+        btnGetStarted = findViewById(R.id.btnGetStartedSignUp)
     }
 
     private fun onTvLoginClicked(){

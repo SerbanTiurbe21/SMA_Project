@@ -60,6 +60,7 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
         }
 
         holder.imageViewTrip.loadImageAsync(holder.imageViewTrip.context, trip.photoUri)
+
         holder.textViewOriginalPrice.apply {
             text = "${trip.price.toInt()}$"
             paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
@@ -79,6 +80,12 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
         holder.textViewInfoDetails.setOnClickListener{
             val bundle = bundleOf("tripId" to trip.id)
             it.findNavController().navigate(R.id.action_nav_home_to_nav_tripDetails, bundle)
+        }
+
+        holder.itemView.setOnLongClickListener{
+            val bundle = bundleOf("tripId" to trip.id)
+            it.findNavController().navigate(R.id.action_nav_home_to_nav_editTrip, bundle)
+            true
         }
     }
 

@@ -23,12 +23,14 @@ import com.example.wanderlog.R
 import com.example.wanderlog.api.service.TripService
 import com.example.wanderlog.database.dto.TripDTO
 import com.example.wanderlog.database.dto.UserDTO
+import com.example.wanderlog.database.models.Trip
 import com.example.wanderlog.retrofit.RetrofitInstance
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import retrofit2.Call
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -271,12 +273,10 @@ class AddTripFragment : Fragment() {
                         }
                     }
                 }
-
                 minPriceEditText.addTextChangedListener(this)
                 maxPriceEditText.addTextChangedListener(this)
             }
         }
-
         minPriceEditText.addTextChangedListener(textWatcher)
         maxPriceEditText.addTextChangedListener(textWatcher)
     }
@@ -285,17 +285,33 @@ class AddTripFragment : Fragment() {
         val tripService: TripService = RetrofitInstance.getRetrofitInstance().create(
             TripService::class.java
         )
-        val call = tripService.createTrip(trip)
-        call.enqueue(object : retrofit2.Callback<TripDTO> {
-            override fun onResponse(call: retrofit2.Call<TripDTO>, response: retrofit2.Response<TripDTO>) {
+        val call: Call<Trip> = tripService.createTrip(trip)
+        call.enqueue(object : retrofit2.Callback<Trip> {
+            override fun onResponse(call: Call<Trip>, response: retrofit2.Response<Trip>) {
                 if (response.isSuccessful) {
+                    Toast.makeText(context, "Trip added successfully", Toast.LENGTH_SHORT).show()
+                    Log.e("AddTripFragment", response.body().toString())
+
+                    val sharedPreferences = requireActivity().getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+                    val userJson = sharedPreferences.getString("USER", null) ?: return
+                    val userDTO: UserDTO = Gson().fromJson(userJson, UserDTO::class.java)
+                    val updatedTrips = userDTO.trips.toMutableSet()
+                    updatedTrips.add(response.body()!!)
+                    userDTO.trips = updatedTrips
+                    sharedPreferences.edit().apply {
+                        putString("USER", Gson().toJson(userDTO))
+                        apply()
+                    }
+
                     val intent = Intent(context, MainActivity::class.java)
                     startActivity(intent)
+                } else {
+                    Toast.makeText(context, "Failed to add trip", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: retrofit2.Call<TripDTO>, t: Throwable) {
-                println(t.message)
+            override fun onFailure(call: Call<Trip>, t: Throwable) {
+                Toast.makeText(context, "Failed to add trip", Toast.LENGTH_SHORT).show()
             }
         })
     }
