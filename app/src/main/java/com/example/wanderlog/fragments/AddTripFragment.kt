@@ -119,6 +119,7 @@ class AddTripFragment : Fragment() {
             val tripName = fromTextInputEditText.text.toString() + " to " + toTextInputEditText.text.toString()
             val startDate = departureEditText.text.toString()
             val endDate = arrivingEditText.text.toString()
+            val origin = fromTextInputEditText.text.toString()
             val destination = toTextInputEditText.text.toString()
             val tripType = selectedTripType ?: ""
             val price = (priceRangeSlider.values[0] + priceRangeSlider.values[1]) / 2
@@ -131,8 +132,8 @@ class AddTripFragment : Fragment() {
             val temperature = 0f
             val isFavourite = false
 
-            if (validateTripFields(tripName, startDate, endDate, destination, priceRangeSlider, rating, photoUri)) {
-                val trip = TripDTO(userId, tripName, startDate, endDate, destination, tripType, price, rating, photoUri, temperature, isFavourite)
+            if (validateTripFields(tripName, startDate, endDate, origin, destination, priceRangeSlider, rating, photoUri)) {
+                val trip = TripDTO(userId, tripName, startDate, endDate, origin, destination, tripType, price, rating, photoUri, temperature, isFavourite)
                 postTripToDatabase(trip)
             }
         }
@@ -145,12 +146,13 @@ class AddTripFragment : Fragment() {
         tripName: String,
         startDate: String,
         endDate: String,
+        origin: String,
         destination: String,
         priceRangeSlider: RangeSlider,
         rating: Float,
         photoUri: String?
     ): Boolean {
-        if (tripName.isBlank() || startDate.isBlank() || endDate.isBlank() || destination.isBlank()) {
+        if (tripName.isBlank() || startDate.isBlank() || endDate.isBlank() || origin.isBlank() ||destination.isBlank()) {
             Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             return false
         }

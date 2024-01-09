@@ -56,7 +56,6 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
 
         bindStars(holder.linearLayoutStarRating, trip.rating)
 
-//        holder.imageViewTrip.loadImageAsync(, trip.photoUri)
 
         holder.imageViewTrip.loadImageAsync(holder.imageViewTrip.context, trip.photoUri)
         holder.textViewOriginalPrice.apply {
@@ -123,10 +122,8 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
     private fun ImageView.loadImageAsync(context: Context, imageUriString: String) {
         val imageView = this
         CoroutineScope(Dispatchers.IO).launch {
-            // Convert the String to a Uri
             val contentUri = Uri.parse(imageUriString)
 
-            // Get the bitmap from the Uri using the ContentResolver
             val bitmap = try {
                 val imageStream = context.contentResolver.openInputStream(contentUri)
                 BitmapFactory.decodeStream(imageStream)
@@ -136,7 +133,6 @@ class TripAdapter(private var tripList: Set<Trip>, private val tripUpdateListene
             }
 
             withContext(Dispatchers.Main) {
-                // Set the bitmap to the ImageView if it was successfully decoded
                 bitmap?.let {
                     imageView.setImageBitmap(it)
                 }
